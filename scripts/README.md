@@ -1,0 +1,305 @@
+# 🤖 Automation Scripts
+
+## Overview
+
+This folder contains automation scripts for managing and syncing solutions across different competitive programming platforms. These scripts help maintain the repository, organize problems, and track progress automatically.
+
+---
+
+## 📁 Scripts
+
+### 1. `cf_sync.sh` - Codeforces Synchronization
+
+**Purpose:** Automatically syncs Codeforces solutions to the repository.
+
+**Features:**
+- Checks for new Codeforces solution files
+- Automatically commits changes with timestamp
+- Pushes to remote repository
+- Provides status feedback
+
+**Usage:**
+```bash
+bash scripts/cf_sync.sh
+```
+
+**What it does:**
+1. Scans the `codeforces/` directory for changes
+2. If changes found, stages all Codeforces files
+3. Creates a commit with current date
+4. Pushes to remote repository
+5. Displays success/status messages
+
+**Example Output:**
+```
+🔵 Syncing Codeforces solutions...
+🚀 Codeforces solutions synced successfully!
+```
+
+---
+
+### 2. `gfg_sync.sh` - GeeksforGeeks Synchronization
+
+**Purpose:** Automatically syncs GeeksforGeeks solutions to the repository.
+
+**Features:**
+- Checks for new GFG solution files
+- Automatically commits changes with timestamp
+- Pushes to remote repository
+- Provides status feedback
+
+**Usage:**
+```bash
+bash scripts/gfg_sync.sh
+```
+
+**What it does:**
+1. Scans the `geeksforgeeks/` directory for changes
+2. If changes found, stages all GFG files
+3. Creates a commit with current date
+4. Pushes to remote repository
+5. Displays success/status messages
+
+**Example Output:**
+```
+🟢 Syncing GeeksforGeeks solutions...
+🚀 GeeksforGeeks solutions synced successfully!
+```
+
+---
+
+### 3. `count_problems.py` - Problem Counter
+
+**Purpose:** Counts the number of solution files across all platforms and generates statistics.
+
+**Features:**
+- Recursively counts solution files (.cpp, .py, .java)
+- Generates statistics for LeetCode, Codeforces, and GFG
+- Outputs to `stats.json` file
+
+**Usage:**
+```bash
+python scripts/count_problems.py
+```
+
+**What it does:**
+1. Walks through `leetcode/`, `codeforces/`, and `geeksforgeeks/` directories
+2. Counts all files with extensions: `.cpp`, `.py`, `.java`
+3. Stores counts in a dictionary format
+4. Writes statistics to `stats.json`
+
+**Output Format:**
+```json
+{
+  "leetcode": 327,
+  "codeforces": 112,
+  "geeksforgeeks": 64
+}
+```
+
+**Integration:**
+- Can be integrated with CI/CD pipelines
+- Used to update README badges
+- Powers dashboard statistics
+
+---
+
+### 4. `sort_leetcode_by_difficulty.py` - LeetCode Organizer
+
+**Purpose:** Automatically organizes LeetCode solutions into difficulty-based folders (easy/, medium/, hard/).
+
+**Features:**
+- Uses LeetCode CLI to fetch difficulty levels
+- Automatically moves files to appropriate folders
+- Creates necessary directory structure
+- Handles files without difficulty information
+
+**Usage:**
+```bash
+python scripts/sort_leetcode_by_difficulty.py
+```
+
+**Prerequisites:**
+- LeetCode CLI installed: `npm install -g @leetcode-cli/cli`
+- LeetCode CLI authenticated
+
+**What it does:**
+1. Creates `easy/`, `medium/`, and `hard/` directories if they don't exist
+2. Scans `leetcode/` directory for solution files
+3. Extracts problem slug from filename
+4. Uses LeetCode CLI to fetch difficulty level
+5. Moves file to appropriate difficulty folder
+6. Skips files where difficulty cannot be determined
+
+**Example Output:**
+```
+✅ Moved two-sum.cpp → easy
+✅ Moved merge-intervals.cpp → medium
+⚠️ Skipping custom-problem.cpp (difficulty not found)
+```
+
+**Error Handling:**
+- Gracefully handles missing LeetCode CLI
+- Skips files without difficulty information
+- Prevents overwriting existing files
+
+---
+
+### 5. `update_dashboard.py` - Dashboard Generator
+
+**Purpose:** Generates a monthly progress dashboard showing problem-solving activity.
+
+**Features:**
+- Analyzes file modification timestamps
+- Groups problems by month
+- Generates markdown dashboard
+- Shows platform-wise and overall statistics
+
+**Usage:**
+```bash
+python scripts/update_dashboard.py
+```
+
+**What it does:**
+1. Scans `leetcode/`, `codeforces/`, and `geeksforgeeks/` directories
+2. Extracts modification timestamp from each solution file
+3. Groups files by month (YYYY-MM format)
+4. Counts problems per month per platform
+5. Generates `dashboard.md` with formatted statistics
+
+**Output Format:**
+```markdown
+# 📊 DSA Monthly Progress Dashboard
+
+_Auto-updated on 15 Jan 2026_
+
+## LeetCode
+- **2026-01**: 45 problems
+- **2026-02**: 52 problems
+
+## Codeforces
+- **2026-01**: 18 problems
+- **2026-02**: 21 problems
+
+## GeeksforGeeks
+- **2026-01**: 10 problems
+- **2026-02**: 8 problems
+
+## 📈 Overall Monthly Progress
+- **2026-01**: 73 problems
+- **2026-02**: 81 problems
+```
+
+**Integration:**
+- Can be scheduled via cron job
+- Can be triggered by GitHub Actions
+- Updates `dashboard.md` automatically
+
+---
+
+## ⚙️ Automation Workflow
+
+### Manual Execution
+Run scripts individually as needed:
+```bash
+# Sync solutions
+bash scripts/cf_sync.sh
+bash scripts/gfg_sync.sh
+
+# Update statistics
+python scripts/count_problems.py
+python scripts/update_dashboard.py
+
+# Organize LeetCode
+python scripts/sort_leetcode_by_difficulty.py
+```
+
+### GitHub Actions Integration
+These scripts can be integrated into GitHub Actions workflows for automated:
+- Daily syncing of solutions
+- Weekly dashboard updates
+- Problem counting and statistics
+- Automatic organization
+
+**Example Workflow:**
+```yaml
+name: Update Dashboard
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: python scripts/update_dashboard.py
+      - run: python scripts/count_problems.py
+      - uses: stefanzweifel/git-auto-commit-action@v4
+```
+
+---
+
+## 🔧 Prerequisites
+
+### System Requirements
+- **Bash** - For shell scripts (Linux/macOS/WSL)
+- **Python 3.6+** - For Python scripts
+- **Git** - For version control operations
+
+### Optional Dependencies
+- **LeetCode CLI** - For `sort_leetcode_by_difficulty.py`
+  ```bash
+  npm install -g @leetcode-cli/cli
+  leetcode config -a
+  ```
+
+### Permissions
+Ensure scripts have execute permissions:
+```bash
+chmod +x scripts/*.sh
+```
+
+---
+
+## 📝 Notes
+
+- All scripts follow best practices with error handling
+- Scripts are designed to be safe and non-destructive
+- Status messages provide clear feedback
+- Scripts can be run independently or in sequence
+- Configuration can be modified in script files as needed
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Issue:** `cf_sync.sh` or `gfg_sync.sh` says "No new solutions"
+- **Solution:** This is expected if there are no uncommitted changes
+
+**Issue:** `sort_leetcode_by_difficulty.py` fails
+- **Solution:** Ensure LeetCode CLI is installed and authenticated
+
+**Issue:** Permission denied errors
+- **Solution:** Run `chmod +x scripts/*.sh` to grant execute permissions
+
+**Issue:** Python script errors
+- **Solution:** Ensure Python 3.6+ is installed: `python3 --version`
+
+---
+
+## 📚 Related Resources
+
+- [Main README](../README.md) - Repository overview
+- [LeetCode Folder](../leetcode/README.md) - LeetCode solutions
+- [Codeforces Folder](../codeforces/README.md) - Codeforces solutions
+- [GeeksforGeeks Folder](../geeksforgeeks/README.md) - GFG solutions
+
+---
+
+_Last updated: Auto-maintained by scripts_
+
