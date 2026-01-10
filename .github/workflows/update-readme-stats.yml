@@ -1,0 +1,113 @@
+name: Update README Statistics
+
+on:
+  # Run daily at 01:00 UTC (after organize-leetcode workflow)
+  schedule:
+    - cron: '0 1 * * *'
+  
+  # Run on push to main branch (when solution files are added/modified)
+  push:
+    branches:
+      - main
+    paths:
+      - 'leetcode/**'
+      - 'codeforces/**'
+      - 'geeksforgeeks/**'
+      - '.github/workflows/update-readme-stats.yml'
+  
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to commit and push changes
+      actions: read    # Standard read permission
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for better git diff
+    
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+    
+      - name: Update README statistics
+        id: update
+        run: |
+          python3 scripts/update_readme_stats.py
+          exit_code=$?
+          
+          # Check if any README files were modified
+          if [ -n "$(git status --porcelain README.md leetcode/README.md codeforces/README.md geeksforgeeks/README.md 2>/dev/null)" ]; then
+            echo "changes_made=true" >> $GITHUB_OUTPUT
+            echo "📝 Changes detected in README files"
+          else
+            echo "changes_made=false" >> $GITHUB_OUTPUT
+            echo "✅ No changes needed. Statistics are already up to date."
+          fi
+          
+          exit $exit_code
+    
+      - name: Configure Git
+        if: steps.update.outputs.changes_made == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+    
+      - name: Prepare commit message
+        if: steps.update.outputs.changes_made == 'true'
+        id: commit
+        run: |
+          # Get trigger type
+          if [ "${{ github.event_name }}" == "schedule" ]; then
+            TRIGGER="Daily scheduled run"
+          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TRIGGER="Manual trigger"
+          else
+            TRIGGER="Push to main branch"
+          fi
+          echo "trigger=$TRIGGER" >> $GITHUB_OUTPUT
+          
+          # Get timestamp
+          TIMESTAMP=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+    
+      - name: Commit changes
+        if: steps.update.outputs.changes_made == 'true'
+        run: |
+          git add README.md leetcode/README.md codeforces/README.md geeksforgeeks/README.md
+          
+          TRIGGER="${{ steps.commit.outputs.trigger }}"
+          TIMESTAMP="${{ steps.commit.outputs.timestamp }}"
+          
+          COMMIT_MSG="Update README statistics with real-time problem counts
+
+          - Updated main README.md with total counts
+          - Updated leetcode/README.md with difficulty breakdown
+          - Updated codeforces/README.md with total count
+          - Updated geeksforgeeks/README.md with total count
+          
+          Triggered by: ${TRIGGER}
+          Date: ${TIMESTAMP}"
+          
+          git commit -m "$COMMIT_MSG" --no-verify
+    
+      - name: Push changes
+        if: steps.update.outputs.changes_made == 'true'
+        run: |
+          git push origin main --no-verify
+    
+      - name: Summary
+        if: always()
+        run: |
+          if [ "${{ steps.update.outputs.changes_made }}" == "true" ]; then
+            echo "✅ Successfully updated README statistics and pushed changes"
+          else
+            echo "✅ All README files are already up to date. No changes needed."
+          fi
+

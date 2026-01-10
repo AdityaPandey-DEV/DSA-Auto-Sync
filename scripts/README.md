@@ -178,7 +178,72 @@ python scripts/organize_leetcode_by_readme.py
 
 ---
 
-### 5. `update_dashboard.py` - Dashboard Generator
+### 5. `update_readme_stats.py` - README Statistics Updater
+
+**Purpose:** Updates all README files with real-time problem statistics from all platforms.
+
+**Features:**
+- Counts problems from LeetCode, Codeforces, and GeeksforGeeks
+- Updates main README.md with total counts and badges
+- Updates leetcode/README.md with total + difficulty breakdown
+- Updates codeforces/README.md with total count
+- Updates geeksforgeeks/README.md with total count
+- Automatically updates badge URLs with correct counts
+- Handles both file-based and folder-based problem organization
+
+**Usage:**
+```bash
+python scripts/update_readme_stats.py
+```
+
+**What it does:**
+1. Counts LeetCode problems by difficulty (easy, medium, hard) and total
+2. Counts Codeforces solution files
+3. Counts GeeksforGeeks solution files
+4. Updates badges in all README files with current counts
+5. Updates statistics sections with breakdowns
+6. Updates total count in main README Key Highlights section
+
+**Example Output:**
+```
+📊 Counting problems from all platforms...
+
+📈 Statistics:
+  LeetCode: 327 total (150 easy, 150 medium, 27 hard)
+  Codeforces: 112
+  GeeksforGeeks: 64
+  Total: 503
+
+📝 Updating README files...
+
+✅ Updated main README.md
+✅ Updated leetcode/README.md
+✅ Updated codeforces/README.md
+✅ Updated geeksforgeeks/README.md
+
+✅ All README files updated successfully!
+```
+
+**Error Handling:**
+- Handles missing directories gracefully
+- Skips files that don't exist
+- Continues processing remaining files if one fails
+- Provides detailed error messages
+
+**Integration:**
+- Used by GitHub Actions workflow (`.github/workflows/update-readme-stats.yml`)
+- Runs daily at 01:00 UTC (after organize-leetcode workflow)
+- Triggers on push to main branch (when solution files change)
+- Can be manually triggered via workflow_dispatch
+- Automatically commits and pushes changes
+
+**Prerequisites:**
+- Python 3.6+
+- README files must exist in expected locations
+
+---
+
+### 6. `update_dashboard.py` - Dashboard Generator
 
 **Purpose:** Generates a monthly progress dashboard showing problem-solving activity.
 
@@ -242,6 +307,7 @@ bash scripts/gfg_sync.sh
 # Update statistics
 python scripts/count_problems.py
 python scripts/update_dashboard.py
+python scripts/update_readme_stats.py  # Update README files with real-time stats
 
 # Organize LeetCode (automated via GitHub Actions)
 python scripts/organize_leetcode_by_readme.py  # Reads from README.md files

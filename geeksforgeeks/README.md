@@ -8,7 +8,7 @@ This folder contains solutions to GeeksforGeeks (GFG) interview-focused coding p
 
 ## 📊 Statistics
 
-![GeeksforGeeks Solved](https://img.shields.io/badge/Problems%20Solved-64-2F8D46?logo=geeksforgeeks&logoColor=white)
+![GeeksforGeeks Solved](https://img.shields.io/badge/Problems%20Solved-0-2F8D46?logo=geeksforgeeks&logoColor=white)
 
 **Current Breakdown:**
 - Easy: ~25 problems
