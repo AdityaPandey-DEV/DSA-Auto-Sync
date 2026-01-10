@@ -1,0 +1,23 @@
+name: Update Stats
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run counter
+        run: python3 scripts/count_problems.py
+
+      - name: Commit stats
+        run: |
+          git config --global user.name "stats-bot"
+          git config --global user.email "bot@github.com"
+          git add stats.json
+          git commit -m "Update problem stats" || exit 0
+          git push
