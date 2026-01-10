@@ -145,7 +145,81 @@ python scripts/sort_leetcode_by_difficulty.py
 
 ---
 
-### 5. `update_dashboard.py` - Dashboard Generator
+### 5. `organize_leetcode_by_readme.py` - Organize Problems by README Difficulty
+
+**Purpose:** Automatically organizes LeetCode problems by difficulty by reading from README.md files.
+
+**Features:**
+- Scans all problem folders in `leetcode/` directory
+- Extracts difficulty from README.md files (HTML format)
+- Moves folders to appropriate difficulty directories (easy/, medium/, hard/)
+- Handles multiple HTML formats for difficulty detection
+- Skips folders already organized or without README
+- Provides detailed statistics and logging
+
+**Usage:**
+```bash
+python scripts/organize_leetcode_by_readme.py
+```
+
+**What it does:**
+1. Scans `leetcode/` directory for problem folders (excludes easy/, medium/, hard/)
+2. For each problem folder:
+   - Checks if `README.md` exists
+   - Reads first few lines to extract difficulty from HTML format
+   - Parses patterns like: `alt='Difficulty: Medium'` or `<img alt="Difficulty: Hard" />`
+   - Determines target directory based on difficulty
+   - Checks if folder already in correct location (skips if yes)
+   - Moves folder to appropriate difficulty directory
+3. Provides summary with counts for each difficulty level
+4. Returns exit code 0 if changes made, 0 if no changes needed
+
+**Supported HTML Formats:**
+- `<img alt='Difficulty: Medium' />`
+- `<img alt="Difficulty: Medium" />`
+- `alt='Easy'` or `alt="Hard"`
+- Markdown format: `## Difficulty: Medium`
+
+**Example Output:**
+```
+📁 Found 15 problem folders to process
+
+✅ Moved 896-smallest-subtree-with-all-the-deepest-nodes → medium/
+✅ Moved 1-two-sum → easy/
+⏭️  Skipping 2-add-two-numbers (already in difficulty folder)
+⚠️  Skipping 3-longest-substring (could not extract difficulty)
+
+📊 Summary:
+  ✅ Easy: 3
+  ✅ Medium: 8
+  ✅ Hard: 2
+  ⏭️  Skipped: 2
+  ❌ Errors: 0
+
+✅ Changes made! Please commit the changes.
+```
+
+**Error Handling:**
+- Handles missing README.md files gracefully
+- Skips folders with invalid difficulty formats
+- Prevents overwriting existing folders
+- Logs all warnings and errors
+- Continues processing remaining problems even if some fail
+
+**Integration:**
+- Used by GitHub Actions workflow (`.github/workflows/organize-leetcode.yml`)
+- Runs daily via cron schedule
+- Triggers on push to main branch (leetcode/ directory changes)
+- Can be manually triggered via workflow_dispatch
+- Automatically commits and pushes changes
+
+**Prerequisites:**
+- Python 3.6+
+- Problem folders must have README.md with difficulty information in HTML format
+
+---
+
+### 6. `update_dashboard.py` - Dashboard Generator
 
 **Purpose:** Generates a monthly progress dashboard showing problem-solving activity.
 
@@ -211,7 +285,8 @@ python scripts/count_problems.py
 python scripts/update_dashboard.py
 
 # Organize LeetCode
-python scripts/sort_leetcode_by_difficulty.py
+python scripts/sort_leetcode_by_difficulty.py  # Uses LeetCode CLI
+python scripts/organize_leetcode_by_readme.py  # Reads from README.md files
 ```
 
 ### GitHub Actions Integration

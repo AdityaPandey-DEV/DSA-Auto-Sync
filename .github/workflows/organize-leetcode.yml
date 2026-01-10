@@ -1,0 +1,136 @@
+name: Auto-organize LeetCode Problems by Difficulty
+
+on:
+  # Run daily at 00:00 UTC
+  schedule:
+    - cron: '0 0 * * *'
+  
+  # Run on push to main branch (only if leetcode/ directory is modified)
+  push:
+    branches:
+      - main
+    paths:
+      - 'leetcode/**'
+      - '!leetcode/easy/**'
+      - '!leetcode/medium/**'
+      - '!leetcode/hard/**'
+  
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  organize-leetcode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to commit and push changes
+      actions: read    # Standard read permission
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for better git diff
+    
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+    
+      - name: Run organization script
+        id: organize
+        run: |
+          python3 scripts/organize_leetcode_by_readme.py
+          exit_code=$?
+          
+          # Check if changes were made
+          if [ -n "$(git status --porcelain leetcode/)" ]; then
+            echo "changes_made=true" >> $GITHUB_OUTPUT
+            echo "📝 Changes detected in leetcode/ directory"
+          else
+            echo "changes_made=false" >> $GITHUB_OUTPUT
+            echo "✅ No changes detected"
+          fi
+          
+          exit $exit_code
+    
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ "${{ steps.organize.outputs.changes_made }}" == "true" ]; then
+            echo "Changes detected, will commit and push"
+          else
+            echo "No changes, skipping commit"
+          fi
+    
+      - name: Configure Git
+        if: steps.organize.outputs.changes_made == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+    
+      - name: Get stats for commit message
+        if: steps.organize.outputs.changes_made == 'true'
+        id: stats
+        run: |
+          git add leetcode/
+          
+          # Count new files (added) in difficulty directories
+          # Note: When folders are moved, they show as deletions from old location
+          # and additions in new location. We count the additions.
+          EASY_COUNT=$(git diff --cached --name-only --diff-filter=A | grep -c "^leetcode/easy/" || echo "0")
+          MEDIUM_COUNT=$(git diff --cached --name-only --diff-filter=A | grep -c "^leetcode/medium/" || echo "0")
+          HARD_COUNT=$(git diff --cached --name-only --diff-filter=A | grep -c "^leetcode/hard/" || echo "0")
+          
+          # If counts are 0, try counting directories instead of files
+          if [ "$EASY_COUNT" == "0" ] && [ "$MEDIUM_COUNT" == "0" ] && [ "$HARD_COUNT" == "0" ]; then
+            EASY_COUNT=$(git diff --cached --name-only | grep "^leetcode/easy/" | cut -d'/' -f3 | sort -u | wc -l || echo "0")
+            MEDIUM_COUNT=$(git diff --cached --name-only | grep "^leetcode/medium/" | cut -d'/' -f3 | sort -u | wc -l || echo "0")
+            HARD_COUNT=$(git diff --cached --name-only | grep "^leetcode/hard/" | cut -d'/' -f3 | sort -u | wc -l || echo "0")
+          fi
+          
+          echo "easy_count=$EASY_COUNT" >> $GITHUB_OUTPUT
+          echo "medium_count=$MEDIUM_COUNT" >> $GITHUB_OUTPUT
+          echo "hard_count=$HARD_COUNT" >> $GITHUB_OUTPUT
+          
+          # Get trigger type
+          if [ "${{ github.event_name }}" == "schedule" ]; then
+            TRIGGER="Daily scheduled run"
+          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TRIGGER="Manual trigger"
+          else
+            TRIGGER="Push to main branch"
+          fi
+          echo "trigger=$TRIGGER" >> $GITHUB_OUTPUT
+          
+          # Get timestamp
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+    
+      - name: Commit changes
+        if: steps.organize.outputs.changes_made == 'true'
+        run: |
+          COMMIT_MSG="Auto-organize LeetCode problems by difficulty
+
+          - Moved ${{ steps.stats.outputs.easy_count }} problem(s) to easy/
+          - Moved ${{ steps.stats.outputs.medium_count }} problem(s) to medium/
+          - Moved ${{ steps.stats.outputs.hard_count }} problem(s) to hard/
+          
+          Triggered by: ${{ steps.stats.outputs.trigger }}
+          Date: ${{ steps.stats.outputs.timestamp }}"
+          
+          git commit -m "$COMMIT_MSG" --no-verify
+    
+      - name: Push changes
+        if: steps.organize.outputs.changes_made == 'true'
+        run: |
+          git push origin main --no-verify
+    
+      - name: Summary
+        if: always()
+        run: |
+          if [ "${{ steps.organize.outputs.changes_made }}" == "true" ]; then
+            echo "✅ Successfully organized LeetCode problems and pushed changes"
+          else
+            echo "✅ All problems are already organized correctly. No changes needed."
+          fi
+
