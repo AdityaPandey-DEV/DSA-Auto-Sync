@@ -104,48 +104,7 @@ python scripts/count_problems.py
 
 ---
 
-### 4. `sort_leetcode_by_difficulty.py` - LeetCode Organizer
-
-**Purpose:** Automatically organizes LeetCode solutions into difficulty-based folders (easy/, medium/, hard/).
-
-**Features:**
-- Uses LeetCode CLI to fetch difficulty levels
-- Automatically moves files to appropriate folders
-- Creates necessary directory structure
-- Handles files without difficulty information
-
-**Usage:**
-```bash
-python scripts/sort_leetcode_by_difficulty.py
-```
-
-**Prerequisites:**
-- LeetCode CLI installed: `npm install -g @leetcode-cli/cli`
-- LeetCode CLI authenticated
-
-**What it does:**
-1. Creates `easy/`, `medium/`, and `hard/` directories if they don't exist
-2. Scans `leetcode/` directory for solution files
-3. Extracts problem slug from filename
-4. Uses LeetCode CLI to fetch difficulty level
-5. Moves file to appropriate difficulty folder
-6. Skips files where difficulty cannot be determined
-
-**Example Output:**
-```
-✅ Moved two-sum.cpp → easy
-✅ Moved merge-intervals.cpp → medium
-⚠️ Skipping custom-problem.cpp (difficulty not found)
-```
-
-**Error Handling:**
-- Gracefully handles missing LeetCode CLI
-- Skips files without difficulty information
-- Prevents overwriting existing files
-
----
-
-### 5. `organize_leetcode_by_readme.py` - Organize Problems by README Difficulty
+### 4. `organize_leetcode_by_readme.py` - Organize Problems by README Difficulty
 
 **Purpose:** Automatically organizes LeetCode problems by difficulty by reading from README.md files.
 
@@ -219,7 +178,7 @@ python scripts/organize_leetcode_by_readme.py
 
 ---
 
-### 6. `update_dashboard.py` - Dashboard Generator
+### 5. `update_dashboard.py` - Dashboard Generator
 
 **Purpose:** Generates a monthly progress dashboard showing problem-solving activity.
 
@@ -284,8 +243,7 @@ bash scripts/gfg_sync.sh
 python scripts/count_problems.py
 python scripts/update_dashboard.py
 
-# Organize LeetCode
-python scripts/sort_leetcode_by_difficulty.py  # Uses LeetCode CLI
+# Organize LeetCode (automated via GitHub Actions)
 python scripts/organize_leetcode_by_readme.py  # Reads from README.md files
 ```
 
@@ -325,11 +283,7 @@ jobs:
 - **Git** - For version control operations
 
 ### Optional Dependencies
-- **LeetCode CLI** - For `sort_leetcode_by_difficulty.py`
-  ```bash
-  npm install -g @leetcode-cli/cli
-  leetcode config -a
-  ```
+- **Python 3.6+** - For all Python scripts
 
 ### Permissions
 Ensure scripts have execute permissions:
@@ -356,8 +310,6 @@ chmod +x scripts/*.sh
 **Issue:** `cf_sync.sh` or `gfg_sync.sh` says "No new solutions"
 - **Solution:** This is expected if there are no uncommitted changes
 
-**Issue:** `sort_leetcode_by_difficulty.py` fails
-- **Solution:** Ensure LeetCode CLI is installed and authenticated
 
 **Issue:** Permission denied errors
 - **Solution:** Run `chmod +x scripts/*.sh` to grant execute permissions
