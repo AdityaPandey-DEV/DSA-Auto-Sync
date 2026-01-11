@@ -139,6 +139,26 @@ jobs:
           
           git commit -m "$COMMIT_MSG" --no-verify
     
+      - name: Fetch latest changes
+        if: steps.organize.outputs.changes_made == 'true'
+        run: |
+          git fetch origin main
+    
+      - name: Rebase on latest main
+        if: steps.organize.outputs.changes_made == 'true'
+        run: |
+          # Rebase our commit on top of latest main
+          git rebase origin/main || {
+            echo "⚠️  Rebase had conflicts, trying merge instead..."
+            git rebase --abort 2>/dev/null || true
+            git merge origin/main --no-edit || true
+          }
+          
+          # Re-stage any changes after rebase/merge
+          if [ -n "$(git status --porcelain leetcode/)" ]; then
+            git add leetcode/
+          fi
+    
       - name: Push changes
         if: steps.organize.outputs.changes_made == 'true'
         run: |

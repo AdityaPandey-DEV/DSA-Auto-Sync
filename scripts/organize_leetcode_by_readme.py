@@ -10,6 +10,7 @@ and moves folders to appropriate difficulty directories (easy/, medium/, hard/).
 import os
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -168,24 +169,56 @@ def organize_problems():
                 if other_path.exists():
                     print(f"🔄 Removing duplicate {folder_name} from {other_dir.name}/")
                     try:
-                        shutil.rmtree(str(other_path))
-                    except Exception as e:
-                        print(f"⚠️  Warning: Could not remove from {other_dir.name}: {e}", file=sys.stderr)
+                        # Try git rm first to preserve history
+                        subprocess.run(
+                            ["git", "rm", "-r", str(other_path)],
+                            check=True,
+                            capture_output=True,
+                            text=True
+                        )
+                    except (subprocess.CalledProcessError, FileNotFoundError):
+                        # Fallback to shutil if git not available
+                        try:
+                            shutil.rmtree(str(other_path))
+                        except Exception as e:
+                            print(f"⚠️  Warning: Could not remove from {other_dir.name}: {e}", file=sys.stderr)
         
         if target_path.exists():
             print(f"🔄 Replacing existing solution for {folder_name} in {difficulty}/")
             try:
-                # Remove existing folder
-                shutil.rmtree(str(target_path))
-                print(f"   Removed old solution")
+                # Try git rm first to preserve history
+                try:
+                    subprocess.run(
+                        ["git", "rm", "-r", str(target_path)],
+                        check=True,
+                        capture_output=True,
+                        text=True
+                    )
+                    print(f"   Removed old solution (preserving git history)")
+                except (subprocess.CalledProcessError, FileNotFoundError):
+                    # Fallback to shutil if git not available
+                    shutil.rmtree(str(target_path))
+                    print(f"   Removed old solution")
             except Exception as e:
                 print(f"⚠️  Warning: Could not remove existing folder: {e}", file=sys.stderr)
                 # Continue anyway - will try to move and may overwrite
         
-        # Move folder to target directory
+        # Move folder to target directory using git mv to preserve history
         try:
-            shutil.move(str(folder), str(target_path))
-            print(f"✅ Moved {folder_name} → {difficulty}/")
+            # Use git mv to preserve commit history
+            try:
+                subprocess.run(
+                    ["git", "mv", str(folder), str(target_path)],
+                    check=True,
+                    capture_output=True,
+                    text=True
+                )
+                print(f"✅ Moved {folder_name} → {difficulty}/ (preserving git history)")
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                # Fallback to shutil.move if git is not available or not in git repo
+                shutil.move(str(folder), str(target_path))
+                print(f"✅ Moved {folder_name} → {difficulty}/")
+            
             stats[difficulty] += 1
             changes_made = True
         except Exception as e:
