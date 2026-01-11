@@ -147,12 +147,63 @@ jobs:
       - name: Rebase on latest main
         if: steps.organize.outputs.changes_made == 'true'
         run: |
-          # Rebase our commit on top of latest main
-          git rebase origin/main || {
-            echo "⚠️  Rebase had conflicts, trying merge instead..."
+          # Try rebase first
+          if git rebase origin/main; then
+            echo "✅ Rebase successful"
+          else
+            echo "⚠️  Rebase had conflicts, resolving..."
+            
+            # Abort rebase and use merge strategy instead
             git rebase --abort 2>/dev/null || true
-            git merge origin/main --no-edit || true
-          }
+            
+            # Merge with strategy to prefer our moves
+            if ! git merge origin/main --no-edit; then
+              echo "Resolving merge conflicts..."
+              
+              # Handle file location conflicts
+              # Files added in remote in old location should be moved to new location
+              CONFLICTED=$(git diff --name-only --diff-filter=U 2>/dev/null || echo "")
+              
+              if [ -n "$CONFLICTED" ]; then
+                for file in $CONFLICTED; do
+                  # If file is in leetcode root and problem folder was moved
+                  if [[ "$file" == leetcode/* ]] && [[ "$file" != leetcode/easy/* ]] && [[ "$file" != leetcode/medium/* ]] && [[ "$file" != leetcode/hard/* ]]; then
+                    PROBLEM_DIR=$(echo "$file" | cut -d'/' -f2)
+                    
+                    # Find where this problem was moved to
+                    for diff in easy medium hard; do
+                      if [ -d "leetcode/$diff/$PROBLEM_DIR" ]; then
+                        echo "Moving conflicted file $file to leetcode/$diff/"
+                        # Accept the file from remote
+                        git checkout --theirs "$file" 2>/dev/null || true
+                        # Move it to correct location
+                        if [ -f "$file" ]; then
+                          TARGET="leetcode/$diff/$file"
+                          mkdir -p "$(dirname "$TARGET")"
+                          mv "$file" "$TARGET" 2>/dev/null || cp "$file" "$TARGET" && rm "$file"
+                          git add "$TARGET"
+                          git rm "$file" 2>/dev/null || true
+                        fi
+                        break
+                      fi
+                    done
+                  else
+                    # Accept theirs for other conflicts
+                    git checkout --theirs "$file" 2>/dev/null || git add "$file" 2>/dev/null || true
+                  fi
+                done
+              fi
+              
+              # Stage all leetcode changes
+              git add -A leetcode/ 2>/dev/null || true
+              
+              # Complete merge
+              git commit --no-edit --no-verify || {
+                echo "⚠️  Could not resolve conflicts automatically"
+                exit 1
+              }
+            fi
+          fi
           
           # Re-stage any changes after rebase/merge
           if [ -n "$(git status --porcelain leetcode/)" ]; then
