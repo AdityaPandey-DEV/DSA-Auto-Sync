@@ -97,6 +97,26 @@ jobs:
           
           git commit -m "$COMMIT_MSG" --no-verify
     
+      - name: Fetch latest changes
+        if: steps.update.outputs.changes_made == 'true'
+        run: |
+          git fetch origin main
+    
+      - name: Rebase on latest main
+        if: steps.update.outputs.changes_made == 'true'
+        run: |
+          # Rebase our commit on top of latest main
+          git rebase origin/main || {
+            echo "⚠️  Rebase had conflicts, trying merge instead..."
+            git rebase --abort 2>/dev/null || true
+            git merge origin/main --no-edit || true
+          }
+          
+          # Re-stage any changes after rebase/merge
+          if [ -n "$(git status --porcelain README.md leetcode/README.md codeforces/README.md geeksforgeeks/README.md 2>/dev/null)" ]; then
+            git add README.md leetcode/README.md codeforces/README.md geeksforgeeks/README.md
+          fi
+    
       - name: Push changes
         if: steps.update.outputs.changes_made == 'true'
         run: |
