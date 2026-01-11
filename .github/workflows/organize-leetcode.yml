@@ -213,7 +213,41 @@ jobs:
       - name: Push changes
         if: steps.organize.outputs.changes_made == 'true'
         run: |
-          git push origin main --no-verify
+          # Fetch latest again before pushing (handle race conditions)
+          git fetch origin main
+          
+          # Check if we're behind remote
+          if [ "$(git rev-list --count HEAD..origin/main)" -gt 0 ]; then
+            echo "⚠️  Remote has new commits, rebasing again..."
+            git rebase origin/main || {
+              echo "⚠️  Rebase failed, trying merge..."
+              git rebase --abort 2>/dev/null || true
+              git merge origin/main --no-edit || true
+              git add -A leetcode/ 2>/dev/null || true
+            }
+          fi
+          
+          # Push with retry logic
+          MAX_RETRIES=3
+          RETRY=0
+          while [ $RETRY -lt $MAX_RETRIES ]; do
+            if git push origin main --no-verify; then
+              echo "✅ Push successful"
+              break
+            else
+              RETRY=$((RETRY + 1))
+              if [ $RETRY -lt $MAX_RETRIES ]; then
+                echo "⚠️  Push failed, retrying ($RETRY/$MAX_RETRIES)..."
+                git fetch origin main
+                git rebase origin/main || git merge origin/main --no-edit || true
+                git add -A leetcode/ 2>/dev/null || true
+                sleep 2
+              else
+                echo "❌ Push failed after $MAX_RETRIES attempts"
+                exit 1
+              fi
+            fi
+          done
     
       - name: Summary
         if: always()
