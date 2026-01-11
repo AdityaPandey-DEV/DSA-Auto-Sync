@@ -111,13 +111,21 @@ def organize_problems():
     stats = {"easy": 0, "medium": 0, "hard": 0, "skipped": 0, "errors": 0}
     changes_made = False
     
-    # Get all folders in leetcode/ directory
-    problem_folders = [
-        folder for folder in BASE_DIR.iterdir()
-        if folder.is_dir() and folder.name not in EXCLUDED_FOLDERS
-    ]
+    # Get all folders and files in leetcode/ directory
+    problem_folders = []
+    problem_files = []
     
-    print(f"📁 Found {len(problem_folders)} problem folders to process\n")
+    for item in BASE_DIR.iterdir():
+        if item.name in EXCLUDED_FOLDERS:
+            continue
+        if item.is_dir():
+            problem_folders.append(item)
+        elif item.is_file() and item.suffix in ['.cpp', '.py', '.java']:
+            # Create a temporary folder structure for file-based problems
+            problem_files.append(item)
+    
+    total_items = len(problem_folders) + len(problem_files)
+    print(f"📁 Found {len(problem_folders)} problem folders and {len(problem_files)} problem files to process\n")
     
     for folder in sorted(problem_folders):
         folder_name = folder.name
@@ -150,12 +158,29 @@ def organize_problems():
             stats["errors"] += 1
             continue
         
-        # Check if target already exists
+        # Check if target already exists - replace it with new solution
         target_path = target_dir / folder_name
+        
+        # Also check if problem exists in other difficulty folders and remove them
+        for other_dir in [EASY_DIR, MEDIUM_DIR, HARD_DIR]:
+            if other_dir != target_dir:
+                other_path = other_dir / folder_name
+                if other_path.exists():
+                    print(f"🔄 Removing duplicate {folder_name} from {other_dir.name}/")
+                    try:
+                        shutil.rmtree(str(other_path))
+                    except Exception as e:
+                        print(f"⚠️  Warning: Could not remove from {other_dir.name}: {e}", file=sys.stderr)
+        
         if target_path.exists():
-            print(f"⚠️  Skipping {folder_name} (target {target_path} already exists)")
-            stats["skipped"] += 1
-            continue
+            print(f"🔄 Replacing existing solution for {folder_name} in {difficulty}/")
+            try:
+                # Remove existing folder
+                shutil.rmtree(str(target_path))
+                print(f"   Removed old solution")
+            except Exception as e:
+                print(f"⚠️  Warning: Could not remove existing folder: {e}", file=sys.stderr)
+                # Continue anyway - will try to move and may overwrite
         
         # Move folder to target directory
         try:
