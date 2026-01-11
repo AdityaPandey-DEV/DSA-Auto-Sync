@@ -115,15 +115,29 @@ def update_leetcode_readme(leetcode_stats):
         content = total_pattern.sub(replace_total, content)
         
         # Update breakdown section
+        # Pattern matches: **Current Breakdown:**\n- Easy: X problems\n- Medium: Y problems\n- Hard: Z problems
         breakdown_pattern = re.compile(
-            r'(\*\*Current Breakdown:\*\*\s*\n- Easy: )~\d+( problems\s*\n- Medium: )~\d+( problems\s*\n- Hard: )~\d+( problems)',
-            re.IGNORECASE
+            r'(\*\*Current Breakdown:\*\*\s*\n- Easy: )\d+( problems\s*\n- Medium: )\d+( problems\s*\n- Hard: )\d+( problems)',
+            re.IGNORECASE | re.MULTILINE
         )
         
         def replace_breakdown(match):
             return f"{match.group(1)}{leetcode_stats['easy']}{match.group(2)}{leetcode_stats['medium']}{match.group(3)}{leetcode_stats['hard']}{match.group(4)}"
         
         content = breakdown_pattern.sub(replace_breakdown, content)
+        
+        # Also try pattern without "problems" suffix (more flexible)
+        breakdown_pattern2 = re.compile(
+            r'(\*\*Current Breakdown:\*\*\s*\n- Easy: )\d+(\s*\n- Medium: )\d+(\s*\n- Hard: )\d+',
+            re.IGNORECASE | re.MULTILINE
+        )
+        
+        def replace_breakdown2(match):
+            return f"{match.group(1)}{leetcode_stats['easy']} problems{match.group(2)}{leetcode_stats['medium']} problems{match.group(3)}{leetcode_stats['hard']} problems"
+        
+        # Only apply second pattern if first didn't match
+        if breakdown_pattern.search(content) is None:
+            content = breakdown_pattern2.sub(replace_breakdown2, content)
         
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
