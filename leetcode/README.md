@@ -11,7 +11,7 @@ This folder contains solutions to LeetCode problems organized by difficulty leve
 ![LeetCode Solved](https://img.shields.io/badge/Problems%20Solved-15-FFA116?logo=leetcode&logoColor=black)
 
 **Current Breakdown:**
-- Easy: 4 problems
+- Easy: 5 problems
 - Medium: 5 problems
 - Hard: 5 problems
 
