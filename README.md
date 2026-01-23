@@ -11,7 +11,7 @@ Designed to demonstrate **problem-solving consistency, clean code practices, and
 
 ## 📊 Live Problem Statistics
 
-![LeetCode](https://img.shields.io/badge/LeetCode-34-FFA116?logo=leetcode&logoColor=black)
+![LeetCode](https://img.shields.io/badge/LeetCode-35-FFA116?logo=leetcode&logoColor=black)
 ![Codeforces](https://img.shields.io/badge/Codeforces-7-1F8ACB?logo=codeforces&logoColor=white)
 ![GeeksforGeeks](https://img.shields.io/badge/GeeksforGeeks-0-2F8D46?logo=geeksforgeeks&logoColor=white)
 
@@ -30,7 +30,7 @@ Designed to demonstrate **problem-solving consistency, clean code practices, and
 
 ## ✨ Key Highlights
 
-- ✅ Solved **41+ DSA problems** across platforms  
+- ✅ Solved **42+ DSA problems** across platforms  
 - ✅ Active **Codeforces contest participant**  
 - ✅ Clean, categorized, readable solutions  
 - ✅ Automated tracking using **GitHub Actions & Python scripts**
