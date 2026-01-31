@@ -39,4 +39,5 @@ jobs:
       - name: Check formatting with clang-format
         run: |
           # Find all .cpp and .h files and check format
-          find . -name "*.cpp" -o -name "*.h" | xargs clang-format --dry-run --Werror -style=Google
+          # Find all .cpp and .h files and check format
+          find . \( -name "*.cpp" -o -name "*.h" \) -exec clang-format --dry-run --Werror -style=Google {} +
