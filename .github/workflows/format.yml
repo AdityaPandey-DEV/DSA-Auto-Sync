@@ -33,7 +33,7 @@ jobs:
           
       - name: Format C++ with clang-format
         run: |
-          find . -name "*.cpp" -o -name "*.h" | xargs clang-format -i -style=Google
+          find . \( -name "*.cpp" -o -name "*.h" \) -print0 | xargs -0 clang-format -i -style=Google
           
       - name: Commit and Push changes
         run: |
