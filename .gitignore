@@ -1,2 +1,9 @@
 __pycache__/
 .vscode/
+.DS_Store
+*.exe
+*.o
+*.out
+env/
+venv/
+*.log
