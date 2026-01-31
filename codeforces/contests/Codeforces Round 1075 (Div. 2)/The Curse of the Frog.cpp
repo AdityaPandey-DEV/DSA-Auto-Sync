@@ -4,8 +4,7 @@ using namespace std;
 void solve() {
   int n;
   long long x;
-  if (!(cin >> n >> x))
-    return;
+  if (!(cin >> n >> x)) return;
   long long current_dist = 0;
   long long max_gain = -2e18;
   for (int i = 0; i < n; ++i) {

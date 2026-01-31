@@ -5,8 +5,9 @@ from collections import defaultdict
 ROOTS = {
     "LeetCode": "leetcode",
     "Codeforces": "codeforces",
-    "GeeksforGeeks": "geeksforgeeks"
+    "GeeksforGeeks": "geeksforgeeks",
 }
+
 
 def count_monthly(root):
     monthly = defaultdict(int)
@@ -18,6 +19,7 @@ def count_monthly(root):
                 month = datetime.fromtimestamp(ts).strftime("%Y-%m")
                 monthly[month] += 1
     return monthly
+
 
 dashboard = []
 dashboard.append("# 📊 DSA Monthly Progress Dashboard\n")

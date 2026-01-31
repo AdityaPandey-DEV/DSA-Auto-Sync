@@ -1,17 +1,17 @@
 #include <bits/stdc++.h>
+
 #include <iostream>
 using namespace std;
 
 void solve() {
   int n;
   long long h, l;
-  if (!(cin >> n >> h >> l))
-    return;
+  if (!(cin >> n >> h >> l)) return;
 
   vector<int> a(n);
-  int n_R = 0; // Row-only: val <= h AND val > l
-  int n_C = 0; // Col-only: val > h AND val <= l
-  int n_F = 0; // Flexible: val <= h AND val <= l
+  int n_R = 0;  // Row-only: val <= h AND val > l
+  int n_C = 0;  // Col-only: val > h AND val <= l
+  int n_F = 0;  // Flexible: val <= h AND val <= l
 
   for (int i = 0; i < n; ++i) {
     cin >> a[i];
