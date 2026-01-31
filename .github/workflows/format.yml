@@ -33,9 +33,7 @@ jobs:
           
       - name: Format C++ with clang-format
         run: |
-          clang-format --version
           find . \( -name "*.cpp" -o -name "*.h" \) -exec clang-format -i -style=Google {} +
-          git status
           
       - name: Commit and Push changes
         run: |
