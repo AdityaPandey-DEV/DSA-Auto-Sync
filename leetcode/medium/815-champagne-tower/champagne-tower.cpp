@@ -2,9 +2,9 @@ class Solution {
 public:
 
 double rec(int i,int j,vector<vector<double>> &dp){
-    if(i==0&&j==0){
-        return dp[0][0];
-    }
+    // if(i==0&&j==0){
+    //     return dp[0][0];
+    // }
     if(j<0||j>i){
         return 0.0;
     }
