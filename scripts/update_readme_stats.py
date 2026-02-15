@@ -172,8 +172,6 @@ def update_codeforces_readme(count):
         return False
 
 
-
-
 def update_main_readme(leetcode_count, codeforces_count):
     """Update main README.md with all statistics."""
     file_path = "README.md"
@@ -240,18 +238,14 @@ def main():
         f"  LeetCode: {leetcode_stats['total']} total ({leetcode_stats['easy']} easy, {leetcode_stats['medium']} medium, {leetcode_stats['hard']} hard)"
     )
     print(f"  Codeforces: {codeforces_count}")
-    print(
-        f"  Total: {leetcode_stats['total'] + codeforces_count}\n"
-    )
+    print(f"  Total: {leetcode_stats['total'] + codeforces_count}\n")
 
     # Update README files
     changes_made = False
 
     print("📝 Updating README files...\n")
 
-    if update_main_readme(
-        leetcode_stats["total"], codeforces_count
-    ):
+    if update_main_readme(leetcode_stats["total"], codeforces_count):
         print("✅ Updated main README.md")
         changes_made = True
 
@@ -262,7 +256,6 @@ def main():
     if update_codeforces_readme(codeforces_count):
         print("✅ Updated codeforces/README.md")
         changes_made = True
-
 
     if changes_made:
         print("\n✅ All README files updated successfully!")

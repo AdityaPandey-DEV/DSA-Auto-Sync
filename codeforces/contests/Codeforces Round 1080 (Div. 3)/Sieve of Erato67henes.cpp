@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -25,8 +26,7 @@ int main() {
           break;
         }
       }
-      if (found)
-        break;
+      if (found) break;
     }
     if (found) {
       cout << "Yes";

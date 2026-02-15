@@ -8,8 +8,7 @@ int main() {
     int n;
     cin >> n;
     vector<int> L(n + 1), R(n + 1);
-    for (int i = 1; i <= n; i++)
-      cin >> L[i] >> R[i];
+    for (int i = 1; i <= n; i++) cin >> L[i] >> R[i];
     vector<int> order;
     queue<int> q;
     q.push(1);
@@ -40,8 +39,7 @@ int main() {
     }
     for (int i = 1; i <= n; i++) {
       cout << ans[i];
-      if (i < n)
-        cout << " ";
+      if (i < n) cout << " ";
     }
     cout << "\n";
   }

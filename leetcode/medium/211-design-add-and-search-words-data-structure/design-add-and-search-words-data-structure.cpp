@@ -1,57 +1,47 @@
 class WordDictionary {
-public:
-    bool isEndOfWord;
-    WordDictionary *child[26];
-    WordDictionary() {
-        isEndOfWord=false;
-        for(auto &c:child){
-            c=NULL;
-        }
-        
+ public:
+  bool isEndOfWord;
+  WordDictionary *child[26];
+  WordDictionary() {
+    isEndOfWord = false;
+    for (auto &c : child) {
+      c = NULL;
     }
-    
-    void addWord(string word) {
-        WordDictionary *curl=this;
-        for(auto ch:word){
-            int idx=ch-'a';
-            if(curl->child[idx]==NULL){
-                curl->child[idx]=new WordDictionary();
-            }
-            curl=curl->child[idx];
+  }
 
-        }
-        curl->isEndOfWord=true;
-        
+  void addWord(string word) {
+    WordDictionary *curl = this;
+    for (auto ch : word) {
+      int idx = ch - 'a';
+      if (curl->child[idx] == NULL) {
+        curl->child[idx] = new WordDictionary();
+      }
+      curl = curl->child[idx];
     }
-    
-    bool searchHelper(string &word, int pos, WordDictionary* node) {
-        if(pos == word.size())
-            return node->isEndOfWord;
+    curl->isEndOfWord = true;
+  }
 
-        char ch = word[pos];
+  bool searchHelper(string &word, int pos, WordDictionary *node) {
+    if (pos == word.size()) return node->isEndOfWord;
 
-        if(ch == '.') {
-            for(int i = 0; i < 26; i++) {
-                if(node->child[i] != NULL) {
-                    if(searchHelper(word, pos + 1, node->child[i]))
-                        return true;
-                }
-            }
-            return false;
+    char ch = word[pos];
+
+    if (ch == '.') {
+      for (int i = 0; i < 26; i++) {
+        if (node->child[i] != NULL) {
+          if (searchHelper(word, pos + 1, node->child[i])) return true;
         }
-        else {
-            int idx = ch - 'a';
-            if(node->child[idx] == NULL)
-                return false;
+      }
+      return false;
+    } else {
+      int idx = ch - 'a';
+      if (node->child[idx] == NULL) return false;
 
-            return searchHelper(word, pos + 1, node->child[idx]);
-        }
+      return searchHelper(word, pos + 1, node->child[idx]);
     }
+  }
 
-    bool search(string word) {
-        return searchHelper(word, 0, this);
-    }
-
+  bool search(string word) { return searchHelper(word, 0, this); }
 };
 
 /**
