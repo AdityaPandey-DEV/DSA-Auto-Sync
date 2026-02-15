@@ -1,5 +1,5 @@
 class Solution {
-    void rec(vector<int>& candidates ,vector<vector<int>>&ans,int i,vector<int>a, int target){
+    void rec(vector<int>& candidates ,vector<vector<int>>&ans,int i,vector<int>&a, int target){
         if(target==0){
             ans.push_back(a);
             return;
@@ -12,6 +12,7 @@ class Solution {
         a.push_back(candidates[i]);
         
         rec(candidates,ans,i,a,target-candidates[i]);
+        a.pop_back();
 
 
     }
