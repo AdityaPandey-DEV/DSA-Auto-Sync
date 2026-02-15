@@ -10,7 +10,7 @@ public:
         a.push_back(nums[i]);
         
         rec(nums,ans,i-1,a);
-        a.pop_back();
+        // a.pop_back();
 
 
     }
