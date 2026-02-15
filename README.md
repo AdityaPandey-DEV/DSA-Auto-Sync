@@ -15,14 +15,14 @@ This repository serves as a **live portfolio** of my problem-solving journey, fe
 | Platform | Status |
 |----------|--------|
 | **LeetCode** | ![LeetCode](https://img.shields.io/badge/LeetCode-71-FFA116?logo=leetcode&logoColor=black) |
-| **Codeforces** | ![Codeforces](https://img.shields.io/badge/Codeforces-11-1F8ACB?logo=codeforces&logoColor=white) |
+| **Codeforces** | ![Codeforces](https://img.shields.io/badge/Codeforces-14-1F8ACB?logo=codeforces&logoColor=white) |
 | **GeeksforGeeks** | ![GeeksforGeeks](https://img.shields.io/badge/GeeksforGeeks-0-2F8D46?logo=geeksforgeeks&logoColor=white) |
 
 ---
 
 ## ✨ Key Highlights
 
-- ✅ Solved **82+ DSA problems** across top platforms.
+- ✅ Solved **85+ DSA problems** across top platforms.
 - 🔄 **Fully Automated Synchronization** using GitHub Actions & Python scripts.
 - 🏆 **Clean Code Principles**: Solutions are optimized for time & space complexity.
 - 📈 **Continuous Integration**: Linting and formatting checks ensure code quality.

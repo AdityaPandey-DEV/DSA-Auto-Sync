@@ -8,7 +8,7 @@ This folder contains solutions to Codeforces competitive programming problems or
 
 ## 📊 Statistics
 
-![Codeforces Solved](https://img.shields.io/badge/Problems%20Solved-11-1F8ACB?logo=codeforces&logoColor=white)
+![Codeforces Solved](https://img.shields.io/badge/Problems%20Solved-14-1F8ACB?logo=codeforces&logoColor=white)
 
 **Current Breakdown:**
 - Contest Problems: ~80 problems
