@@ -38,43 +38,13 @@ bash scripts/cf_sync.sh
 
 ---
 
-### 2. `gfg_sync.sh` - GeeksforGeeks Synchronization
-
-**Purpose:** Automatically syncs GeeksforGeeks solutions to the repository.
-
-**Features:**
-- Checks for new GFG solution files
-- Automatically commits changes with timestamp
-- Pushes to remote repository
-- Provides status feedback
-
-**Usage:**
-```bash
-bash scripts/gfg_sync.sh
-```
-
-**What it does:**
-1. Scans the `geeksforgeeks/` directory for changes
-2. If changes found, stages all GFG files
-3. Creates a commit with current date
-4. Pushes to remote repository
-5. Displays success/status messages
-
-**Example Output:**
-```
-🟢 Syncing GeeksforGeeks solutions...
-🚀 GeeksforGeeks solutions synced successfully!
-```
-
----
-
-### 3. `count_problems.py` - Problem Counter
+### 2. `count_problems.py` - Problem Counter
 
 **Purpose:** Counts the number of solution files across all platforms and generates statistics.
 
 **Features:**
 - Recursively counts solution files (.cpp, .py, .java)
-- Generates statistics for LeetCode, Codeforces, and GFG
+- Generates statistics for LeetCode and Codeforces
 - Outputs to `stats.json` file
 
 **Usage:**
@@ -83,7 +53,7 @@ python scripts/count_problems.py
 ```
 
 **What it does:**
-1. Walks through `leetcode/`, `codeforces/`, and `geeksforgeeks/` directories
+1. Walks through `leetcode/` and `codeforces/` directories
 2. Counts all files with extensions: `.cpp`, `.py`, `.java`
 3. Stores counts in a dictionary format
 4. Writes statistics to `stats.json`
@@ -92,8 +62,7 @@ python scripts/count_problems.py
 ```json
 {
   "leetcode": 327,
-  "codeforces": 112,
-  "geeksforgeeks": 64
+  "codeforces": 112
 }
 ```
 
@@ -104,7 +73,7 @@ python scripts/count_problems.py
 
 ---
 
-### 4. `organize_leetcode_by_readme.py` - Organize Problems by README Difficulty
+### 3. `organize_leetcode_by_readme.py` - Organize Problems by README Difficulty
 
 **Purpose:** Automatically organizes LeetCode problems by difficulty by reading from README.md files.
 
@@ -178,16 +147,15 @@ python scripts/organize_leetcode_by_readme.py
 
 ---
 
-### 5. `update_readme_stats.py` - README Statistics Updater
+### 4. `update_readme_stats.py` - README Statistics Updater
 
 **Purpose:** Updates all README files with real-time problem statistics from all platforms.
 
 **Features:**
-- Counts problems from LeetCode, Codeforces, and GeeksforGeeks
+- Counts problems from LeetCode and Codeforces
 - Updates main README.md with total counts and badges
 - Updates leetcode/README.md with total + difficulty breakdown
 - Updates codeforces/README.md with total count
-- Updates geeksforgeeks/README.md with total count
 - Automatically updates badge URLs with correct counts
 - Handles both file-based and folder-based problem organization
 
@@ -199,10 +167,9 @@ python scripts/update_readme_stats.py
 **What it does:**
 1. Counts LeetCode problems by difficulty (easy, medium, hard) and total
 2. Counts Codeforces solution files
-3. Counts GeeksforGeeks solution files
-4. Updates badges in all README files with current counts
-5. Updates statistics sections with breakdowns
-6. Updates total count in main README Key Highlights section
+3. Updates badges in all README files with current counts
+4. Updates statistics sections with breakdowns
+5. Updates total count in main README Key Highlights section
 
 **Example Output:**
 ```
@@ -211,15 +178,13 @@ python scripts/update_readme_stats.py
 📈 Statistics:
   LeetCode: 327 total (150 easy, 150 medium, 27 hard)
   Codeforces: 112
-  GeeksforGeeks: 64
-  Total: 503
+  Total: 439
 
 📝 Updating README files...
 
 ✅ Updated main README.md
 ✅ Updated leetcode/README.md
 ✅ Updated codeforces/README.md
-✅ Updated geeksforgeeks/README.md
 
 ✅ All README files updated successfully!
 ```
@@ -243,7 +208,7 @@ python scripts/update_readme_stats.py
 
 ---
 
-### 6. `update_dashboard.py` - Dashboard Generator
+### 5. `update_dashboard.py` - Dashboard Generator
 
 **Purpose:** Generates a monthly progress dashboard showing problem-solving activity.
 
@@ -259,7 +224,7 @@ python scripts/update_dashboard.py
 ```
 
 **What it does:**
-1. Scans `leetcode/`, `codeforces/`, and `geeksforgeeks/` directories
+1. Scans `leetcode/` and `codeforces/` directories
 2. Extracts modification timestamp from each solution file
 3. Groups files by month (YYYY-MM format)
 4. Counts problems per month per platform
@@ -278,10 +243,6 @@ _Auto-updated on 15 Jan 2026_
 ## Codeforces
 - **2026-01**: 18 problems
 - **2026-02**: 21 problems
-
-## GeeksforGeeks
-- **2026-01**: 10 problems
-- **2026-02**: 8 problems
 
 ## 📈 Overall Monthly Progress
 - **2026-01**: 73 problems
@@ -302,7 +263,6 @@ Run scripts individually as needed:
 ```bash
 # Sync solutions
 bash scripts/cf_sync.sh
-bash scripts/gfg_sync.sh
 
 # Update statistics
 python scripts/count_problems.py
@@ -373,7 +333,7 @@ chmod +x scripts/*.sh
 
 ### Common Issues
 
-**Issue:** `cf_sync.sh` or `gfg_sync.sh` says "No new solutions"
+**Issue:** `cf_sync.sh` says "No new solutions"
 - **Solution:** This is expected if there are no uncommitted changes
 
 
@@ -390,7 +350,6 @@ chmod +x scripts/*.sh
 - [Main README](../README.md) - Repository overview
 - [LeetCode Folder](../leetcode/README.md) - LeetCode solutions
 - [Codeforces Folder](../codeforces/README.md) - Codeforces solutions
-- [GeeksforGeeks Folder](../geeksforgeeks/README.md) - GFG solutions
 
 ---
 

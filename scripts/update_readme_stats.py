@@ -6,7 +6,6 @@ This script counts problems from each platform and updates:
 - Main README.md with total counts
 - leetcode/README.md with total + difficulty breakdown
 - codeforces/README.md with total count
-- geeksforgeeks/README.md with total count
 """
 
 import os
@@ -18,7 +17,7 @@ from pathlib import Path
 def count_solution_files(directory):
     """Count solution files (.cpp, .py, .java) in a directory recursively.
 
-    For platforms like Codeforces and GeeksforGeeks, count all solution files.
+    For platforms like Codeforces, count all solution files.
     """
     if not os.path.exists(directory):
         return 0
@@ -173,37 +172,9 @@ def update_codeforces_readme(count):
         return False
 
 
-def update_geeksforgeeks_readme(count):
-    """Update geeksforgeeks/README.md with statistics."""
-    file_path = "geeksforgeeks/README.md"
-    if not os.path.exists(file_path):
-        print(f"⚠️  File not found: {file_path}")
-        return False
-
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read()
-
-        # Update badge
-        badge_pattern = re.compile(
-            r"(\!\[GeeksforGeeks Solved\]\()(https://img\.shields\.io/badge/Problems%20Solved-)(\d+)(-2F8D46[^\]]+\))",
-            re.IGNORECASE,
-        )
-
-        def replace_badge(match):
-            return f"{match.group(1)}{match.group(2)}{count}{match.group(4)}"
-
-        content = badge_pattern.sub(replace_badge, content)
-
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(content)
-        return True
-    except Exception as e:
-        print(f"❌ Error updating geeksforgeeks/README.md: {e}", file=sys.stderr)
-        return False
 
 
-def update_main_readme(leetcode_count, codeforces_count, geeksforgeeks_count):
+def update_main_readme(leetcode_count, codeforces_count):
     """Update main README.md with all statistics."""
     file_path = "README.md"
     if not os.path.exists(file_path):
@@ -236,21 +207,8 @@ def update_main_readme(leetcode_count, codeforces_count, geeksforgeeks_count):
 
         content = cf_pattern.sub(replace_cf, content)
 
-        # Update GeeksforGeeks badge
-        gfg_pattern = re.compile(
-            r"(\!\[GeeksforGeeks\]\()(https://img\.shields\.io/badge/GeeksforGeeks-)(\d+)(-2F8D46[^\]]+\))",
-            re.IGNORECASE,
-        )
-
-        def replace_gfg(match):
-            return (
-                f"{match.group(1)}{match.group(2)}{geeksforgeeks_count}{match.group(4)}"
-            )
-
-        content = gfg_pattern.sub(replace_gfg, content)
-
         # Update total in Key Highlights
-        total = leetcode_count + codeforces_count + geeksforgeeks_count
+        total = leetcode_count + codeforces_count
         total_pattern = re.compile(
             r"(- ✅ Solved \*\*)(\d+)(\+ DSA problems)", re.IGNORECASE
         )
@@ -274,18 +232,16 @@ def main():
 
     # Count problems
     leetcode_stats = count_leetcode_by_difficulty()
-    # For Codeforces and GeeksforGeeks, count all solution files
+    # For Codeforces, count all solution files
     codeforces_count = count_solution_files("codeforces")
-    geeksforgeeks_count = count_solution_files("geeksforgeeks")
 
     print(f"📈 Statistics:")
     print(
         f"  LeetCode: {leetcode_stats['total']} total ({leetcode_stats['easy']} easy, {leetcode_stats['medium']} medium, {leetcode_stats['hard']} hard)"
     )
     print(f"  Codeforces: {codeforces_count}")
-    print(f"  GeeksforGeeks: {geeksforgeeks_count}")
     print(
-        f"  Total: {leetcode_stats['total'] + codeforces_count + geeksforgeeks_count}\n"
+        f"  Total: {leetcode_stats['total'] + codeforces_count}\n"
     )
 
     # Update README files
@@ -294,7 +250,7 @@ def main():
     print("📝 Updating README files...\n")
 
     if update_main_readme(
-        leetcode_stats["total"], codeforces_count, geeksforgeeks_count
+        leetcode_stats["total"], codeforces_count
     ):
         print("✅ Updated main README.md")
         changes_made = True
@@ -307,9 +263,6 @@ def main():
         print("✅ Updated codeforces/README.md")
         changes_made = True
 
-    if update_geeksforgeeks_readme(geeksforgeeks_count):
-        print("✅ Updated geeksforgeeks/README.md")
-        changes_made = True
 
     if changes_made:
         print("\n✅ All README files updated successfully!")

@@ -105,7 +105,6 @@ This script uses the LeetCode CLI to fetch difficulty levels and organizes files
 
 - [Algorithm Notes](../notes/) - Comprehensive notes on DSA topics
 - [Codeforces Solutions](../codeforces/) - Competitive programming contest problems
-- [GeeksforGeeks Solutions](../geeksforgeeks/) - Interview-focused problems
 - [Main README](../README.md) - Repository overview
 
 ---

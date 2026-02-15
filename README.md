@@ -16,7 +16,6 @@ This repository serves as a **live portfolio** of my problem-solving journey, fe
 |----------|--------|
 | **LeetCode** | ![LeetCode](https://img.shields.io/badge/LeetCode-71-FFA116?logo=leetcode&logoColor=black) |
 | **Codeforces** | ![Codeforces](https://img.shields.io/badge/Codeforces-14-1F8ACB?logo=codeforces&logoColor=white) |
-| **GeeksforGeeks** | ![GeeksforGeeks](https://img.shields.io/badge/GeeksforGeeks-0-2F8D46?logo=geeksforgeeks&logoColor=white) |
 
 ---
 
@@ -44,7 +43,6 @@ This repository serves as a **live portfolio** of my problem-solving journey, fe
 .
 ├── codeforces/      # Solutions from Codeforces contests
 ├── leetcode/        # LeetCode solutions (categorized by difficulty)
-├── geeksforgeeks/   # GeeksforGeeks practice problems
 ├── scripts/         # Automation scripts for stats and syncing
 └── .github/         # CI/CD workflows
 ```
