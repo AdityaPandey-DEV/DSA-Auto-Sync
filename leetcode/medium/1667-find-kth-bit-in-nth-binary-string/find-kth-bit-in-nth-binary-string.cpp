@@ -14,10 +14,9 @@ public:
     char findKthBit(int n, int k) {
         string s="0";
         for(int i=1;i<n;i++){
-            string temp=s;
-            string in=invert(temp);
+            string in=invert(s);
             reverse(in.begin(),in.end());
-            s=temp+"1"+in;
+            s+="1"+in;
         }
         return s[k-1];
         
