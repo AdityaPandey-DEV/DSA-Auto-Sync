@@ -82,7 +82,7 @@ def extract_difficulty_from_readme(readme_path):
     try:
         with open(readme_path, "r", encoding="utf-8") as f:
             # Read first few lines (difficulty is usually in first line or early lines)
-            first_lines = "".join(f.readlines()[:5])
+            first_lines = "".join([f.readline() for _ in range(5)])
 
             # Pattern 1: Look for alt='Difficulty: Medium' or alt="Difficulty: Medium"
             pattern1 = r"alt=['\"]Difficulty:\s*(Easy|Medium|Hard)['\"]"
