@@ -1,61 +1,52 @@
 class Bank {
-    vector<long long> balance;
-    
-    int n;
+  vector<long long> balance;
 
-    bool checkAccount(int account){
-        bool ans=true;
+  int n;
 
+  bool checkAccount(int account) {
+    bool ans = true;
 
-            if(account<1 || account>n){
-                ans=false;
-            }
-        
-        return ans;
-
+    if (account < 1 || account > n) {
+      ans = false;
     }
-public:
-    Bank(vector<long long>& balance) {
-        this->balance=balance;
-        n=balance.size();
 
-        
-    }
-    
-    bool transfer(int account1, int account2, long long money) {
-        
-        if(checkAccount(account1)&&checkAccount(account2)){
-            if(balance[account1-1]>=money){
-                balance[account1-1]-=money;
-                balance[account2-1]+=money;
-                return true;
-            }
-        }
-        return false;
-        
-    }
-    
-    bool deposit(int account, long long money) {
-        if(checkAccount(account)){
-            balance[account-1]+=money;
-            return true;
+    return ans;
+  }
 
-        }
-        return false;
-        
-    }
-    
-    bool withdraw(int account, long long money) {
-        if(checkAccount(account)){
-            if(balance[account-1]>=money){
-                balance[account-1]-=money;
-                return true;
-            }
+ public:
+  Bank(vector<long long>& balance) {
+    this->balance = balance;
+    n = balance.size();
+  }
 
-        }
-        return false;
-        
+  bool transfer(int account1, int account2, long long money) {
+    if (checkAccount(account1) && checkAccount(account2)) {
+      if (balance[account1 - 1] >= money) {
+        balance[account1 - 1] -= money;
+        balance[account2 - 1] += money;
+        return true;
+      }
     }
+    return false;
+  }
+
+  bool deposit(int account, long long money) {
+    if (checkAccount(account)) {
+      balance[account - 1] += money;
+      return true;
+    }
+    return false;
+  }
+
+  bool withdraw(int account, long long money) {
+    if (checkAccount(account)) {
+      if (balance[account - 1] >= money) {
+        balance[account - 1] -= money;
+        return true;
+      }
+    }
+    return false;
+  }
 };
 
 /**
