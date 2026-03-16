@@ -1,8 +1,14 @@
 name: Code Quality
 
 on:
-  push:
-    branches: [ "main" ]
+  # Run after Auto Format completes to avoid race condition
+  # where lint checks code before format has pushed its changes
+  workflow_run:
+    workflows: ["Auto Format"]
+    types:
+      - completed
+    branches:
+      - main
   pull_request:
     branches: [ "main" ]
 
@@ -12,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -32,6 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       
       - name: Install clang-format
         run: sudo apt-get install -y clang-format
@@ -39,5 +49,5 @@ jobs:
       - name: Check formatting with clang-format
         run: |
           # Find all .cpp and .h files and check format
-          # Find all .cpp and .h files and check format
           find . \( -name "*.cpp" -o -name "*.h" \) -exec clang-format --dry-run --Werror -style=Google {} +
+
