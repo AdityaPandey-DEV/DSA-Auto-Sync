@@ -8,6 +8,7 @@ ROOTS = {
     "GeeksforGeeks": "geeksforgeeks",
 }
 
+
 def count_monthly(root):
     monthly = defaultdict(int)
     for base, _, files in os.walk(root):
@@ -18,6 +19,7 @@ def count_monthly(root):
                 month = datetime.fromtimestamp(ts).strftime("%Y-%m")
                 monthly[month] += 1
     return monthly
+
 
 def main():
     overall = defaultdict(int)
@@ -32,7 +34,7 @@ def main():
     dashboard = []
     dashboard.append("# 📊 CP Progress Sync Dashboard\n")
     dashboard.append(f"> _Auto-updated on {datetime.now().strftime('%d %b %Y')}_\n")
-    
+
     # Check if there is data
     if not overall:
         dashboard.append("No data available yet.")
@@ -43,15 +45,15 @@ def main():
     # Prepare data for Mermaid chart
     sorted_months = sorted(overall.keys())
     counts = [overall[m] for m in sorted_months]
-    
+
     months_str = ", ".join(f'"{m}"' for m in sorted_months)
     counts_str = ", ".join(str(c) for c in counts)
     max_count = max(counts) if counts else 10
     # Add a bit of padding to the max y-axis
     y_max = max_count + (5 - max_count % 5 if max_count % 5 != 0 else 5)
-    
+
     dashboard.append("## 📈 Progress Activity Overview")
-    dashboard.append("<div align=\"center\">\n")
+    dashboard.append('<div align="center">\n')
     dashboard.append("```mermaid")
     dashboard.append("xychart-beta")
     dashboard.append('    title "Problems Solved per Month"')
@@ -61,16 +63,16 @@ def main():
     dashboard.append(f"    line [{counts_str}]")
     dashboard.append("```")
     dashboard.append("\n</div>\n")
-    
+
     dashboard.append("## 🏆 Overall Monthly Progress\n")
     dashboard.append("| Month | Problems Solved |")
     dashboard.append("| :--- | :---: |")
     for month in sorted_months:
         dashboard.append(f"| **{month}** | {overall[month]} |")
     dashboard.append("")
-    
+
     dashboard.append("## 💻 Platform Breakdown\n")
-    
+
     for platform, data in platform_data.items():
         if not data:
             continue
@@ -83,6 +85,7 @@ def main():
 
     with open("dashboard.md", "w", encoding="utf-8") as f:
         f.write("\n".join(dashboard))
+
 
 if __name__ == "__main__":
     main()
