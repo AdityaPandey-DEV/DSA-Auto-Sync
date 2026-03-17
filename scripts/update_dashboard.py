@@ -32,7 +32,7 @@ def main():
             overall[month] += count
 
     dashboard = []
-    dashboard.append("# 📊 CP Progress Sync Dashboard\n")
+    dashboard.append("# ⚡ CP Progress Sync Dashboard\n")
     dashboard.append(f"> _Auto-updated on {datetime.now().strftime('%d %b %Y')}_\n")
 
     # Check if there is data
@@ -51,8 +51,7 @@ def main():
     max_count = max(counts) if counts else 10
     # Add a bit of padding to the max y-axis
     y_max = max_count + (5 - max_count % 5 if max_count % 5 != 0 else 5)
-
-    dashboard.append("## 📈 Progress Activity Overview")
+    dashboard.append("## 🔥 Progress Activity Overview")
     dashboard.append('<div align="center">\n')
     dashboard.append("```mermaid")
     dashboard.append("xychart-beta")
@@ -63,16 +62,13 @@ def main():
     dashboard.append(f"    line [{counts_str}]")
     dashboard.append("```")
     dashboard.append("\n</div>\n")
-
-    dashboard.append("## 🏆 Overall Monthly Progress\n")
+    dashboard.append("## 🌟 Overall Monthly Progress\n")
     dashboard.append("| Month | Problems Solved |")
     dashboard.append("| :--- | :---: |")
     for month in sorted_months:
         dashboard.append(f"| **{month}** | {overall[month]} |")
     dashboard.append("")
-
-    dashboard.append("## 💻 Platform Breakdown\n")
-
+    dashboard.append("## 🎯 Platform Breakdown\n")
     for platform, data in platform_data.items():
         if not data:
             continue

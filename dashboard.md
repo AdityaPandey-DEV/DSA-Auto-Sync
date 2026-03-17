@@ -1,8 +1,8 @@
-# 📊 CP Progress Sync Dashboard
+# ⚡ CP Progress Sync Dashboard
 
 > _Auto-updated on 17 Mar 2026_
 
-## 📈 Progress Activity Overview
+## 🔥 Progress Activity Overview
 <div align="center">
 
 ```mermaid
@@ -16,7 +16,7 @@ xychart-beta
 
 </div>
 
-## 🏆 Overall Monthly Progress
+## 🌟 Overall Monthly Progress
 
 | Month | Problems Solved |
 | :--- | :---: |
@@ -24,7 +24,7 @@ xychart-beta
 | **2026-02** | 12 |
 | **2026-03** | 179 |
 
-## 💻 Platform Breakdown
+## 🎯 Platform Breakdown
 
 ### LeetCode
 | Month | Problems Solved |
