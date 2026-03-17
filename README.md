@@ -1,10 +1,10 @@
-# 🚀 DSA Auto Sync
+# 🚀 CP Progress Sync
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-Automated-blue.svg)](.github/workflows)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> **A professionally maintained, automated repository containing optimized solutions to Data Structures & Algorithms (DSA) and Competitive Programming problems.**
+> **A CP Progress Sync tool to automatically track and sync coding activity from platforms like LeetCode and Codeforces to GitHub.**
 
 This repository serves as a **live portfolio** of my problem-solving journey, featuring solutions in **C++** and **Python** that are automatically synchronized from various coding platforms.
 
@@ -21,7 +21,7 @@ This repository serves as a **live portfolio** of my problem-solving journey, fe
 
 ## ✨ Key Highlights
 
-- ✅ Solved **210+ DSA problems** across top platforms.
+- ✅ Solved **208+ DSA problems** across top platforms.
 - 🔄 **Fully Automated Synchronization** using GitHub Actions & Python scripts.
 - 🏆 **Clean Code Principles**: Solutions are optimized for time & space complexity.
 - 📈 **Continuous Integration**: Linting and formatting checks ensure code quality.

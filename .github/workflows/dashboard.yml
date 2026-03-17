@@ -24,5 +24,5 @@ jobs:
           git config --global user.name "dashboard-bot"
           git config --global user.email "bot@github.com"
           git add dashboard.md
-          git commit -m "Auto-update DSA dashboard" || exit 0
+          git commit -m "Auto-update CP dashboard" || exit 0
           git push

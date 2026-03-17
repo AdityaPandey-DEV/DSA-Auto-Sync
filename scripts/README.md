@@ -232,7 +232,7 @@ python scripts/update_dashboard.py
 
 **Output Format:**
 ```markdown
-# 📊 DSA Monthly Progress Dashboard
+# 📊 CP Monthly Progress Dashboard
 
 _Auto-updated on 15 Jan 2026_
 

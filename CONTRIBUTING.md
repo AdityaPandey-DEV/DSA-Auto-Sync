@@ -1,6 +1,6 @@
-# Contributing to DSA Auto Sync
+# Contributing to CP Progress Sync
 
-Thank you for your interest in contributing to **DSA Auto Sync**! We welcome contributions that improve the quality of solutions, add new problems, or enhance the automation scripts.
+Thank you for your interest in contributing to **CP Progress Sync**! We welcome contributions that improve the quality of solutions, add new problems, or enhance the automation scripts.
 
 ## 🚀 How to Contribute
 

@@ -22,7 +22,7 @@ def count_monthly(root):
 
 
 dashboard = []
-dashboard.append("# 📊 DSA Monthly Progress Dashboard\n")
+dashboard.append("# 📊 CP Progress Sync Dashboard\n")
 dashboard.append(f"_Auto-updated on {datetime.now().strftime('%d %b %Y')}_\n")
 
 overall = defaultdict(int)
