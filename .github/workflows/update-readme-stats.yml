@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: update-readme-stats
-      cancel-in-progress: true
+      cancel-in-progress: false
     permissions:
       contents: write  # Required to commit and push changes
       actions: read    # Standard read permission
