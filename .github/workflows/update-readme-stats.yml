@@ -97,7 +97,7 @@ jobs:
           Triggered by: ${TRIGGER}
           Date: ${TIMESTAMP}"
           
-          git commit -m "$COMMIT_MSG" --no-verify
+          git commit -m "$COMMIT_MSG" --no-verify -m "[skip ci]"
     
       - name: Fetch latest changes
         if: steps.update.outputs.changes_made == 'true'

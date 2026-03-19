@@ -16,10 +16,14 @@ jobs:
   lint-python:
     name: Lint Python
     runs-on: ubuntu-latest
+    # Only run if Auto Format succeeded (not cancelled/failed/skipped)
+    if: >
+      github.event_name == 'pull_request' ||
+      github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -38,10 +42,14 @@ jobs:
   lint-cpp:
     name: Lint C++
     runs-on: ubuntu-latest
+    # Only run if Auto Format succeeded (not cancelled/failed/skipped)
+    if: >
+      github.event_name == 'pull_request' ||
+      github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
       
       - name: Install clang-format
         run: sudo apt-get install -y clang-format
@@ -50,4 +58,3 @@ jobs:
         run: |
           # Find all .cpp and .h files and check format
           find . \( -name "*.cpp" -o -name "*.h" \) -exec clang-format --dry-run --Werror -style=Google {} +
-

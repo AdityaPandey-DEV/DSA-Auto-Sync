@@ -26,6 +26,8 @@ def main():
     platform_data = {}
 
     for platform, path in ROOTS.items():
+        if not os.path.exists(path):
+            continue
         data = count_monthly(path)
         platform_data[platform] = data
         for month, count in data.items():

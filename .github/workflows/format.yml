@@ -4,11 +4,18 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'dashboard.md'
+      - 'README.md'
+      - 'leetcode/README.md'
+      - 'codeforces/README.md'
   workflow_dispatch:
 
 jobs:
   format:
     runs-on: ubuntu-latest
+    # Skip runs triggered by bot commits (our own formatting commits)
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     concurrency:
       group: push-to-main
       cancel-in-progress: false
@@ -47,7 +54,7 @@ jobs:
           
           if [ -n "$(git status --porcelain)" ]; then
             git add .
-            git commit -m "style: Auto-format code with Black and Clang-Format"
+            git commit -m "style: Auto-format code with Black and Clang-Format [skip ci]"
             git pull --rebase origin main
             git push
           else

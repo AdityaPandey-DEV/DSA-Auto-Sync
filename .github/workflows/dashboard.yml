@@ -8,6 +8,8 @@ on:
 jobs:
   dashboard:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     concurrency:
       group: push-to-main
       cancel-in-progress: false
@@ -27,6 +29,6 @@ jobs:
           git config --global user.name "dashboard-bot"
           git config --global user.email "bot@github.com"
           git add dashboard.md
-          git commit -m "Auto-update CP dashboard" || exit 0
+          git commit -m "Auto-update CP dashboard [skip ci]" || exit 0
           git pull --rebase origin main || true
           git push
